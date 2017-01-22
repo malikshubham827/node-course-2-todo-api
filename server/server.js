@@ -14,6 +14,8 @@ const {
   User
 } = require('./models/user');
 
+const port = process.env.PORT || 3000;
+
 let app = express();
 app.use(bodyParser.json());
 
@@ -58,8 +60,8 @@ app.post('/todos', (req, res) => {
 
 });
 
-app.listen(3000, () => {
-  console.log('Server running successfully on port 3000');
+app.listen(port, () => {
+  console.log(`Server running successfully on port: ${port}`);
 })
 
 module.exports = {
