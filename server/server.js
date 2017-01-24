@@ -2,6 +2,7 @@ require('./config/config');
 const _ = require('lodash');
 const express = require('express');
 const bodyParser = require('body-parser');
+const morgan = require('morgan');
 const {
   ObjectID
 } = require('mongodb');
@@ -20,7 +21,7 @@ const port = process.env.PORT;
 
 let app = express();
 app.use(bodyParser.json());
-
+app.use(morgan('combined'));
 
 app.get('/todos', (req, res) => {
   Todo.find().then((todos) => {
@@ -107,6 +108,17 @@ app.patch('/todos/:id', (req, res) => {
       todo
     });
   }).catch((e) => res.status(400).send());
+});
+
+app.post('/users', (req, res) => {
+  let body = _.pick(req.body, ['email', 'password']);
+  let user = new User(body);
+
+  user.save().then(() => {
+    return user.generateAuthToken();
+  }).then((token) => {
+    res.header('x-auth', token).send(user);
+  }).catch((e) => res.status(400).send(e));
 });
 
 app.listen(port, () => {
