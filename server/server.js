@@ -143,6 +143,16 @@ app.post('/users/login', (req, res) => {
     });
 });
 
+app.delete('/users/me/token', authenticate, (req, res) => {
+  req
+    .user
+    .removeByToken(req.token)
+    .then(() => {
+      res.send();
+    })
+    .catch((e) => res.status(400).send());
+});
+
 app.listen(port, () => {
   console.log(`Server running successfully on port: ${port}`);
 })
