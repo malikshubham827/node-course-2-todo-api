@@ -68,9 +68,7 @@ app.post('/todos', authenticate, (req, res) => {
   });
 
   todo.save().then((todo) => {
-    res.send({
-      todo
-    });
+    res.send(todo);
   }, (e) => {
     res.status(400).send(e);
   });
